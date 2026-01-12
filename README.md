@@ -1,10 +1,10 @@
 # go-brave-search
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/cnosuke/go-brave-search.svg)](https://pkg.go.dev/github.com/cnosuke/go-brave-search)
-[![Go Report Card](https://goreportcard.com/badge/github.com/cnosuke/go-brave-search)](https://goreportcard.com/report/github.com/cnosuke/go-brave-search)
+[![Go Reference](https://pkg.go.dev/badge/github.com/claywarren/go-brave-search.svg)](https://pkg.go.dev/github.com/claywarren/go-brave-search)
+[![Go Report Card](https://goreportcard.com/badge/github.com/claywarren/go-brave-search)](https://goreportcard.com/report/github.com/claywarren/go-brave-search)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A Go client library for the Brave Search API. This library provides a simple and idiomatic Go interface to interact with Brave's search services.
+A Go client library for [the Brave Search API](https://api-dashboard.search.brave.com/api-reference/web/search) - This library provides a simple and idiomatic Go interface to interact with Brave's search services.
 
 ## Features
 
@@ -17,7 +17,7 @@ A Go client library for the Brave Search API. This library provides a simple and
 ## Installation
 
 ```bash
-go get github.com/cnosuke/go-brave-search
+go get github.com/claywarren/go-brave-search
 ```
 
 ## Quick Start
@@ -30,7 +30,7 @@ import (
 	"fmt"
 	"log"
 
-	bravesearch "github.com/cnosuke/go-brave-search"
+	bravesearch "github.com/claywarren/go-brave-search"
 )
 
 func main() {
@@ -71,7 +71,7 @@ import (
 	"fmt"
 	"log"
 
-	bravesearch "github.com/cnosuke/go-brave-search"
+	bravesearch "github.com/claywarren/go-brave-search"
 )
 
 func main() {
@@ -114,7 +114,7 @@ func main() {
 
 ## API Reference
 
-For detailed API documentation, see the [Go Reference](https://pkg.go.dev/github.com/cnosuke/go-brave-search).
+For detailed API documentation, see the [Go Reference](https://pkg.go.dev/github.com/claywarren/go-brave-search).
 
 ### Client
 

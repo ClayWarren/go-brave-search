@@ -153,6 +153,9 @@ func (c *Client) buildRequestURL(endpoint string, params *WebSearchParams) (stri
 	if params.Goggles != "" {
 		values.Add("goggles", params.Goggles)
 	}
+	if params.GogglesID != "" {
+		values.Add("goggles_id", params.GogglesID)
+	}
 	if params.Units != "" {
 		values.Add("units", params.Units)
 	}
@@ -218,7 +221,7 @@ func (c *Client) makeRequest(ctx context.Context, method, url string, body inter
 
 		// Close response body if any
 		if resp != nil {
-			resp.Body.Close()
+			_ = resp.Body.Close()
 		}
 
 		// Add exponential backoff
@@ -235,14 +238,14 @@ func (c *Client) makeRequest(ctx context.Context, method, url string, body inter
 	if resp == nil {
 		return fmt.Errorf("no response: %w", respErr)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	// Handle HTTP error status codes
 	if resp.StatusCode != http.StatusOK {
 		var bodyReader io.ReadCloser
 		if strings.Contains(resp.Header.Get("Content-Encoding"), "gzip") {
 			bodyReader, _ = gzip.NewReader(resp.Body)
-			defer bodyReader.Close()
+			defer func() { _ = bodyReader.Close() }()
 
 			respBody, _ := io.ReadAll(bodyReader)
 			resp.Body = io.NopCloser(bytes.NewBuffer(respBody))
@@ -272,7 +275,7 @@ func (c *Client) makeRequest(ctx context.Context, method, url string, body inter
 			if err != nil {
 				return fmt.Errorf("failed to create gzip reader: %w", err)
 			}
-			defer bodyReader.Close()
+			defer func() { _ = bodyReader.Close() }()
 		} else {
 			bodyReader = resp.Body
 		}

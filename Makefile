@@ -18,14 +18,8 @@ cover:
 
 # Run linter
 lint:
-	go vet ./...
-	$(if $(shell which golint), golint ./..., @echo "golint not installed. Run: go install golang.org/x/lint/golint@latest")
+	golangci-lint run
 
-# Format code
-fmt:
-	go fmt ./...
-
-# Clean build artifacts
 clean:
 	rm -f coverage.out
 	rm -rf bin/

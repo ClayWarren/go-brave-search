@@ -1,6 +1,6 @@
-module github.com/cnosuke/go-brave-search
+module github.com/claywarren/go-brave-search
 
-go 1.24.0
+go 1.25
 
 require github.com/stretchr/testify v1.8.4
 

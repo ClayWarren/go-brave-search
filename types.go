@@ -35,6 +35,7 @@ type WebSearchParams struct {
 	Spellcheck      bool   `url:"spellcheck,omitempty"`
 	ResultFilter    string `url:"result_filter,omitempty"`
 	Goggles         string `url:"goggles,omitempty"`
+	GogglesID       string `url:"goggles_id,omitempty"`
 	Units           string `url:"units,omitempty"`
 	ExtraSnippets   bool   `url:"extra_snippets,omitempty"`
 	Summary         bool   `url:"summary,omitempty"`
@@ -53,6 +54,13 @@ type WebSearchResponse struct {
 	Videos      *Videos         `json:"videos,omitempty"`
 	Web         *Search         `json:"web,omitempty"`
 	Summarizer  *Summarizer     `json:"summarizer,omitempty"`
+	Rich        *RichResponse   `json:"rich,omitempty"`
+}
+
+// RichResponse represents rich data enhancements
+type RichResponse struct {
+	Type   string `json:"type"`
+	Result any    `json:"result,omitempty"`
 }
 
 // Search represents a collection of web search results
@@ -78,10 +86,12 @@ type SearchResult struct {
 	Subtype        string   `json:"subtype,omitempty"`
 	IsLive         bool     `json:"is_live,omitempty"`
 	DeepResults    *DeepResults `json:"deep_results,omitempty"`
-	MetaURL        *MetaURL     `json:"meta_url,omitempty"`
-	Thumbnail      *Thumbnail   `json:"thumbnail,omitempty"`
-	Age            string       `json:"age,omitempty"`
-}
+		MetaURL          *MetaURL     `json:"meta_url,omitempty"`
+		Thumbnail        *Thumbnail   `json:"thumbnail,omitempty"`
+		Age              string       `json:"age,omitempty"`
+		ExtraSnippets    []string     `json:"extra_snippets,omitempty"`
+		ContentType      string       `json:"content_type,omitempty"`
+	}
 
 // Profile represents profile information associated with a search result
 type Profile struct {
@@ -94,6 +104,30 @@ type Profile struct {
 // DeepResults represents additional links or features for a search result
 type DeepResults struct {
 	Buttons []ButtonResult `json:"buttons,omitempty"`
+	Social  []SocialResult `json:"social,omitempty"`
+	Video   []VideoResult  `json:"video,omitempty"`
+	Images  []ImageResult  `json:"images,omitempty"`
+	News    []NewsResult   `json:"news,omitempty"`
+}
+
+// SocialResult represents a social media result in deep results
+type SocialResult struct {
+	Type    string `json:"type"`
+	Title   string `json:"title"`
+	URL     string `json:"url"`
+	Snippet string `json:"snippet,omitempty"`
+	Profile string `json:"profile,omitempty"`
+}
+
+// ImageResult represents an image result in deep results
+type ImageResult struct {
+	Type      string     `json:"type"`
+	Title     string     `json:"title"`
+	URL       string     `json:"url"`
+	Source    string     `json:"source,omitempty"`
+	Thumbnail *Thumbnail `json:"thumbnail,omitempty"`
+	Width     int        `json:"width,omitempty"`
+	Height    int        `json:"height,omitempty"`
 }
 
 // ButtonResult represents a button in deep results
@@ -157,44 +191,118 @@ type MixedResultRef struct {
 
 // Discussions represents forum discussions
 type Discussions struct {
-	Type    string `json:"type"`
-	Results []any  `json:"results,omitempty"`
+	Type    string             `json:"type"`
+	Results []DiscussionResult `json:"results,omitempty"`
+}
+
+// DiscussionResult represents an individual discussion result
+type DiscussionResult struct {
+	Type           string   `json:"type"`
+	Title          string   `json:"title"`
+	URL            string   `json:"url"`
+	Description    string   `json:"description,omitempty"`
+	Age            string   `json:"age,omitempty"`
+	PageAge        string   `json:"page_age,omitempty"`
+	FamilyFriendly bool     `json:"family_friendly"`
+	Language       string   `json:"language,omitempty"`
+	Profile        *Profile `json:"profile,omitempty"`
 }
 
 // FAQ represents frequently asked questions
 type FAQ struct {
-	Type    string `json:"type"`
-	Results []any  `json:"results,omitempty"`
+	Type    string      `json:"type"`
+	Results []FAQResult `json:"results,omitempty"`
+}
+
+// FAQResult represents an individual FAQ result
+type FAQResult struct {
+	Type     string `json:"type"`
+	Question string `json:"question"`
+	Answer   string `json:"answer"`
 }
 
 // GraphInfobox represents an infobox
 type GraphInfobox struct {
-	Type string `json:"type"`
-	Data any    `json:"data,omitempty"`
+	Type string       `json:"type"`
+	Data *InfoboxData `json:"data,omitempty"`
+}
+
+// InfoboxData represents the data within an infobox
+type InfoboxData struct {
+	Label       string     `json:"label,omitempty"`
+	Title       string     `json:"title,omitempty"`
+	URL         string     `json:"url,omitempty"`
+	Description string     `json:"description,omitempty"`
+	Thumbnail   *Thumbnail `json:"thumbnail,omitempty"`
+	Attributes  [][]string `json:"attributes,omitempty"`
+	Profiles    []Profile  `json:"profiles,omitempty"`
 }
 
 // Locations represents location results
 type Locations struct {
-	Type    string `json:"type"`
-	Results []any  `json:"results,omitempty"`
+	Type    string        `json:"type"`
+	Results []LocationPOI `json:"results,omitempty"`
+}
+
+// LocationPOI represents a point of interest
+type LocationPOI struct {
+	Type        string     `json:"type"`
+	ID          string     `json:"id"`
+	Name        string     `json:"name"`
+	Address     string     `json:"address,omitempty"`
+	Phone       string     `json:"phone,omitempty"`
+	URL         string     `json:"url,omitempty"`
+	Rating      float64    `json:"rating,omitempty"`
+	ReviewCount int        `json:"review_count,omitempty"`
+	Thumbnail   *Thumbnail `json:"thumbnail,omitempty"`
 }
 
 // News represents news results
 type News struct {
-	Type    string `json:"type"`
-	Results []any  `json:"results,omitempty"`
+	Type    string       `json:"type"`
+	Results []NewsResult `json:"results,omitempty"`
+}
+
+// NewsResult represents an individual news result
+type NewsResult struct {
+	Type           string     `json:"type"`
+	Title          string     `json:"title"`
+	URL            string     `json:"url"`
+	Description    string     `json:"description,omitempty"`
+	Age            string     `json:"age,omitempty"`
+	PageAge        string     `json:"page_age,omitempty"`
+	FamilyFriendly bool       `json:"family_friendly"`
+	Language       string     `json:"language,omitempty"`
+	Profile        *Profile   `json:"profile,omitempty"`
+	Thumbnail      *Thumbnail `json:"thumbnail,omitempty"`
 }
 
 // Videos represents video results
 type Videos struct {
-	Type    string `json:"type"`
-	Results []any  `json:"results,omitempty"`
+	Type    string        `json:"type"`
+	Results []VideoResult `json:"results,omitempty"`
+}
+
+// VideoResult represents an individual video result
+type VideoResult struct {
+	Type           string     `json:"type"`
+	Title          string     `json:"title"`
+	URL            string     `json:"url"`
+	Description    string     `json:"description,omitempty"`
+	Age            string     `json:"age,omitempty"`
+	PageAge        string     `json:"page_age,omitempty"`
+	FamilyFriendly bool       `json:"family_friendly"`
+	Language       string     `json:"language,omitempty"`
+	Thumbnail      *Thumbnail `json:"thumbnail,omitempty"`
+	Duration       string     `json:"duration,omitempty"`
+	EmbedURL       string     `json:"embed_url,omitempty"`
 }
 
 // Summarizer represents summary results
 type Summarizer struct {
-	Type string `json:"type"`
-	Data any    `json:"data,omitempty"`
+	Type   string `json:"type"`
+	Key    string `json:"key,omitempty"`
+	Status string `json:"status,omitempty"`
 }
 
 // RateLimit represents rate limit information

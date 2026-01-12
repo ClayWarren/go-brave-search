@@ -126,6 +126,26 @@ func TestWebSearchWithPagination(t *testing.T) {
 	assert.NotNil(t, resp.Web)
 }
 
+// TestWebSearchWithGoggles tests the goggles helper function
+func TestWebSearchWithGoggles(t *testing.T) {
+	server, client := setupMockServer(t)
+	defer server.Close()
+
+	resp, err := client.WebSearchWithGoggles(context.Background(), "go programming", "https://example.com/goggle")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+}
+
+// TestWebSearchWithGogglesID tests the goggles_id helper function
+func TestWebSearchWithGogglesID(t *testing.T) {
+	server, client := setupMockServer(t)
+	defer server.Close()
+
+	resp, err := client.WebSearchWithGogglesID(context.Background(), "go programming", "custom-goggle-id")
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+}
+
 // TestWebSearchResponseHelpers tests the helper methods on WebSearchResponse
 func TestWebSearchResponseHelpers(t *testing.T) {
 	// Load test data
@@ -164,7 +184,7 @@ func TestWebSearchResponseHelpers(t *testing.T) {
 	assert.True(t, emptyResponse.IsWebResultEmpty())
 
 	// Test with nil response
-	var nilResponse *WebSearchResponse = nil
+	var nilResponse *WebSearchResponse
 	assert.Empty(t, nilResponse.GetWebResults())
 	assert.False(t, nilResponse.HasMoreResults())
 	assert.Equal(t, 0, nilResponse.GetResultCount())

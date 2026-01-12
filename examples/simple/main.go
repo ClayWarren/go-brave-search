@@ -1,3 +1,4 @@
+// Package main provides a simple example of using the Brave Search API client.
 package main
 
 import (
@@ -7,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	bravesearch "github.com/cnosuke/go-brave-search"
+	bravesearch "github.com/claywarren/go-brave-search"
 )
 
 func main() {

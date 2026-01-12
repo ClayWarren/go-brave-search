@@ -2,7 +2,6 @@ package bravesearch
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -112,7 +111,7 @@ func TestWebSearchEmptyQuery(t *testing.T) {
 // TestWebSearchError tests error handling
 func TestWebSearchError(t *testing.T) {
 	// Setup test server that returns an error
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		_, _ = w.Write([]byte(`{"error": "Invalid API key"}`))
 	}))
@@ -142,7 +141,7 @@ func TestWebSearchError(t *testing.T) {
 // TestRateLimitError tests rate limit error detection
 func TestRateLimitError(t *testing.T) {
 	// Setup test server that returns a rate limit error
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusTooManyRequests)
 		_, _ = w.Write([]byte(`{"error": "Rate limit exceeded"}`))
 	}))
@@ -195,7 +194,7 @@ func TestParseRateLimitHeaders(t *testing.T) {
 func TestMakeRequestWithRetries(t *testing.T) {
 	// Setup test server that fails twice then succeeds
 	attempts := 0
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		attempts++
 
 		// First two attempts return 503 error
@@ -254,6 +253,7 @@ func TestBuildRequestURL(t *testing.T) {
 		Spellcheck:      false,
 		ResultFilter:    ResultFilterNews,
 		Goggles:         "custom-goggle",
+		GogglesID:       "custom-goggle-id",
 		Units:           UnitMetric,
 		ExtraSnippets:   true,
 		Summary:         true,
@@ -272,19 +272,9 @@ func TestBuildRequestURL(t *testing.T) {
 	assert.Contains(t, url, "spellcheck=false")
 	assert.Contains(t, url, "result_filter=news")
 	assert.Contains(t, url, "goggles=custom-goggle")
+	assert.Contains(t, url, "goggles_id=custom-goggle-id")
 	assert.Contains(t, url, "units=metric")
 	assert.Contains(t, url, "extra_snippets=true")
 	assert.Contains(t, url, "summary=true")
 }
 
-// loadTestData loads test response data
-func loadTestData(t *testing.T, path string) *WebSearchResponse {
-	data, err := os.ReadFile(path)
-	require.NoError(t, err)
-
-	var response WebSearchResponse
-	err = json.Unmarshal(data, &response)
-	require.NoError(t, err)
-
-	return &response
-}

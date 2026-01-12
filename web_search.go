@@ -79,6 +79,20 @@ func (c *Client) WebSearchWithUnits(ctx context.Context, query string, units str
 	return c.WebSearch(ctx, query, params)
 }
 
+// WebSearchWithGoggles performs a web search with a Goggles definition
+func (c *Client) WebSearchWithGoggles(ctx context.Context, query string, goggles string) (*WebSearchResponse, error) {
+	params := NewWebSearchParams()
+	params.Goggles = goggles
+	return c.WebSearch(ctx, query, params)
+}
+
+// WebSearchWithGogglesID performs a web search with a pre-registered Goggles ID
+func (c *Client) WebSearchWithGogglesID(ctx context.Context, query string, gogglesID string) (*WebSearchResponse, error) {
+	params := NewWebSearchParams()
+	params.GogglesID = gogglesID
+	return c.WebSearch(ctx, query, params)
+}
+
 // WebSearchRecent performs a web search for recent content
 func (c *Client) WebSearchRecent(ctx context.Context, query string) (*WebSearchResponse, error) {
 	params := NewWebSearchParams()
