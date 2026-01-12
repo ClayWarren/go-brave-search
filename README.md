@@ -200,7 +200,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - This library is not officially associated with or endorsed by Brave Software, Inc.
 - Thanks to Brave for providing an excellent search API
-
-## Author
-
-cnosuke ( x.com/cnosuke )
