@@ -22,7 +22,7 @@
 package bravesearch
 
 // Version is the current version of the client library
-const Version = "0.1.0"
+const Version = "0.2.0"
 
 // UserAgentPrefix is the prefix for the user agent string
 const UserAgentPrefix = "go-brave-search"
